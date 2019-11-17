@@ -23,6 +23,14 @@ namespace Shareable_data_generator
         public MainWindow()
         {
             InitializeComponent();
+            loadgrid();
+        }
+
+        private void loadgrid()
+        {
+            ShareableDataEntities TE = new ShareableDataEntities();
+            var data = from d in TE.MainTable select d;
+            dataGrid.ItemsSource = data.ToList(); 
         }
     }
 }
