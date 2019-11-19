@@ -30,7 +30,44 @@ namespace Shareable_data_generator
         {
             ShareableDataEntities TE = new ShareableDataEntities();
             var data = from d in TE.MainTable select d;
-            dataGrid.ItemsSource = data.ToList(); 
+            dataGrid.ItemsSource = data.ToList();
+        }
+
+        private IEnumerable<DataGridRow> GetDataGridRowsForButtons(DataGrid grid)
+        { //IQueryable 
+            grid.UpdateLayout();
+
+      
+            {
+                var itemsSource = grid.ItemsSource as IEnumerable<MainTable>;
+                if (null == itemsSource) yield return null;
+
+                foreach (var item in itemsSource)
+                {
+
+                    var row1 = grid.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
+                    if (null != row1 & row1.IsSelected)
+                        yield return row1;
+                }
+            }
+        }
+
+        void Button_Click_Test(object sender, RoutedEventArgs e)
+        {
+
+            for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
+                if (vis is DataGridRow)
+                {
+                    var rows = GetDataGridRowsForButtons(dataGrid);
+                    string id;
+                    foreach (DataGridRow dr in rows)
+                    {
+                        id = (dr.Item as MainTable).CustomerName;
+                        MessageBox.Show(id);
+                        break;
+                    }
+                    break;
+                }
         }
     }
 }
