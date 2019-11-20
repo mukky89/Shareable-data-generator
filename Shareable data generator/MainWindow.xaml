@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Shareable_data_generator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="564" Width="1021.384">
-    <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Height="435" Width="1001" RenderTransformOrigin="0.254,-0.046">
+        Title="MainWindow" Height="630" Width="1529.834">
+    <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" HorizontalAlignment="Left" Margin="0,93,0,0" VerticalAlignment="Top" Height="451" Width="1472" RenderTransformOrigin="0.254,-0.046" AlternatingRowBackground="#FFEAEAEA" FontFamily="Arial" SelectedCellsChanged="dataGrid_SelectedCellsChanged">
         <DataGrid.Columns>
             <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
             <DataGridTextColumn Header="CustomerName" Binding="{Binding CustomerName}"/>
@@ -18,18 +18,25 @@
             <DataGridTextColumn Header="FolderPath" Binding="{Binding FolderPath}"/>
             <DataGridTextColumn Header="FilePath" Binding="{Binding FilePath}"/>
             <DataGridTextColumn Header="ShareableLink" Binding="{Binding ShareableLink}"/>
-
+            <DataGridTextColumn Header="Timer Status"/>
+            <DataGridTextColumn Header="Last Query"/>
+            <DataGridTextColumn Header="File availability"/>
             <DataGridTemplateColumn Header="TEST">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        
-                            <Button Click="Button_Click_Test" >Text</Button>
-                        
+                        <Button Click="Button_Click_Test" >Text</Button>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="DELETE ROW">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Button Click="Button_Click_delete_row" >Text</Button>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
 
-            <DataGridTextColumn Header="LastQuery" Binding="{Binding LastQuery}"/>
+
         </DataGrid.Columns>
 
 

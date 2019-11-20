@@ -36,8 +36,6 @@ namespace Shareable_data_generator
         private IEnumerable<DataGridRow> GetDataGridRowsForButtons(DataGrid grid)
         { //IQueryable 
             grid.UpdateLayout();
-
-      
             {
                 var itemsSource = grid.ItemsSource as IEnumerable<MainTable>;
                 if (null == itemsSource) yield return null;
@@ -69,5 +67,34 @@ namespace Shareable_data_generator
                     break;
                 }
         }
+
+
+
+        void Button_Click_delete_row(object sender, RoutedEventArgs e)
+        {
+
+            for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
+                if (vis is DataGridRow)
+                {
+                    var rows = GetDataGridRowsForButtons(dataGrid);
+                    string id;
+                    foreach (DataGridRow dr in rows)
+                    {
+                        id = (dr.Item as MainTable).CustomerName;
+                        MessageBox.Show(id);
+                        break;
+                    }
+                    break;
+                }
+        }
+        ShareableDataEntities _db = new ShareableDataEntities();
+
+        private void dataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            _db.SaveChanges();
+        }
+
+
     }
+
 }
