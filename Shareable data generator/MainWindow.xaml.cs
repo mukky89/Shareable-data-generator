@@ -23,6 +23,9 @@ namespace Shareable_data_generator
     /// </summary>
     public partial class MainWindow : Window
     {
+        // odporuca sa spravit len jeden context pre databazu a pracovat snou, lebo takto sa spravi len jedno nacitanie z DB
+        private readonly ShareableDataEntities TE = new ShareableDataEntities();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -31,9 +34,12 @@ namespace Shareable_data_generator
 
         private void loadgrid()
         {
-            ShareableDataEntities TE = new ShareableDataEntities();
-            var data = from d in TE.MainTable select d;
-            dataGrid.ItemsSource = data.ToList();
+            // Najprv treba nacitat vsetko z DB do cache a nasledne sa bude pracovat s Local ObservableCollection
+            // ObservableCollection je prave taky list, ktory sa automaticky aktualizuje
+            // na to aby to fungovalo musi kazdy mat atribut spraveny PropertyChanged - na to som ale moc lenivy takze som pridal
+            // plugin ktory to robi za nas + som upravil template Model1.tt na DB, ktory to bude sam pridavat do kazdej tabulky
+            TE.MainTable.Load();
+            dataGrid.ItemsSource = TE.MainTable.Local;
         }
 
         private IEnumerable<DataGridRow> GetDataGridRowsForButtons(DataGrid grid)
@@ -75,7 +81,6 @@ namespace Shareable_data_generator
 
         void Button_Click_delete_row(object sender, RoutedEventArgs e)
         {
-
             for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
                 if (vis is DataGridRow)
                 {
@@ -99,14 +104,8 @@ namespace Shareable_data_generator
 
         private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-
-            ShareableDataEntities TE = new ShareableDataEntities();
+            // ulozi zmeny v contexte do DB
             TE.SaveChanges();
-            MainTable db = new MainTable();
-            var context = new ShareableDataEntities();
-            context.SaveChanges();
         }
     }
-
-
 }

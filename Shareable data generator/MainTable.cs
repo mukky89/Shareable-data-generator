@@ -9,9 +9,11 @@
 
 namespace Shareable_data_generator
 {
+    using PropertyChanged;
     using System;
     using System.Collections.Generic;
     
+    [AddINotifyPropertyChangedInterface]
     public partial class MainTable
     {
         public int Id { get; set; }
