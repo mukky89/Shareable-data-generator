@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 
 namespace Shareable_data_generator
 {
@@ -87,14 +90,23 @@ namespace Shareable_data_generator
                     break;
                 }
         }
-        ShareableDataEntities _db = new ShareableDataEntities();
+
 
         private void dataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            _db.SaveChanges();
+
         }
 
+        private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
 
+            ShareableDataEntities TE = new ShareableDataEntities();
+            TE.SaveChanges();
+            MainTable db = new MainTable();
+            var context = new ShareableDataEntities();
+            context.SaveChanges();
+        }
     }
+
 
 }

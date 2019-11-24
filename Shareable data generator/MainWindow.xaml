@@ -6,18 +6,18 @@
         xmlns:local="clr-namespace:Shareable_data_generator"
         mc:Ignorable="d"
         Title="MainWindow" Height="630" Width="1529.834">
-    <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" HorizontalAlignment="Left" Margin="0,93,0,0" VerticalAlignment="Top" Height="451" Width="1472" RenderTransformOrigin="0.254,-0.046" AlternatingRowBackground="#FFEAEAEA" FontFamily="Arial" SelectedCellsChanged="dataGrid_SelectedCellsChanged">
+    <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" HorizontalAlignment="Left" VerticalAlignment="Top" Height="600" Width="1520" RenderTransformOrigin="0.254,-0.046" AlternatingRowBackground="#FFEAEAEA" FontFamily="Arial" SelectedCellsChanged="dataGrid_SelectedCellsChanged" Margin="0,0,0,-1" CellEditEnding="dataGrid_CellEditEnding">
         <DataGrid.Columns>
             <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
-            <DataGridTextColumn Header="CustomerName" Binding="{Binding CustomerName}"/>
-            <DataGridTextColumn Header="ExcelName" Binding="{Binding ExcelName}"/>
-            <DataGridTextColumn Header="ColumnsWidth" Binding="{Binding ColumnsWidth}"/>
-            <DataGridTextColumn Header="ColumnsName" Binding="{Binding ColumnsName}"/>
-            <DataGridTextColumn Header="SQLstring" Binding="{Binding SQLstring}"/>
-            <DataGridTextColumn Header="ISYSview" Binding="{Binding ISYSview}"/>
-            <DataGridTextColumn Header="FolderPath" Binding="{Binding FolderPath}"/>
-            <DataGridTextColumn Header="FilePath" Binding="{Binding FilePath}"/>
-            <DataGridTextColumn Header="ShareableLink" Binding="{Binding ShareableLink}"/>
+            <DataGridTextColumn Header="CustomerName" Binding="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}"/>
+            <DataGridTextColumn Header="ExcelName" Binding="{Binding ExcelName, UpdateSourceTrigger=PropertyChanged}"/>
+            <DataGridTextColumn Header="ColumnsWidth" Binding="{Binding ColumnsWidth, UpdateSourceTrigger=PropertyChanged}"/>
+            <DataGridTextColumn Header="ColumnsName" Binding="{Binding ColumnsName, UpdateSourceTrigger=PropertyChanged}"/>
+            <DataGridTextColumn Header="SQLstring" Binding="{Binding SQLstring, UpdateSourceTrigger=PropertyChanged}"/>
+            <DataGridTextColumn Header="ISYSview" Binding="{Binding ISYSview, UpdateSourceTrigger=PropertyChanged}"/>
+            <DataGridTextColumn Header="FolderPath" Binding="{Binding FolderPath, UpdateSourceTrigger=PropertyChanged}"/>
+            <DataGridTextColumn Header="FilePath" Binding="{Binding FilePath, UpdateSourceTrigger=PropertyChanged}"/>
+            <DataGridTextColumn Header="ShareableLink" Binding="{Binding ShareableLink, UpdateSourceTrigger=PropertyChanged}"/>
             <DataGridTextColumn Header="Timer Status"/>
             <DataGridTextColumn Header="Last Query"/>
             <DataGridTextColumn Header="File availability"/>
