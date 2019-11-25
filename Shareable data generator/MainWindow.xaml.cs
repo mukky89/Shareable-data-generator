@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data.Entity;
+using System.Reflection;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 
@@ -80,32 +81,48 @@ namespace Shareable_data_generator
 
 
         void Button_Click_delete_row(object sender, RoutedEventArgs e)
+
         {
-            for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
-                if (vis is DataGridRow)
-                {
-                    var rows = GetDataGridRowsForButtons(dataGrid);
-                    string id;
-                    foreach (DataGridRow dr in rows)
-                    {
-                        id = (dr.Item as MainTable).CustomerName;
-                        MessageBox.Show(id);
-                        break;
-                    }
-                    break;
-                }
+            try
+            {
+                int data_id = (dataGrid.SelectedItem as MainTable).Id;
+                MainTable tbl = (from r in TE.MainTable where r.Id == data_id select r).SingleOrDefault();
+                TE.MainTable.Remove(tbl);
+                TE.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+            }
         }
 
-
-        private void dataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-        {
-
-        }
+       
 
         private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
+            var currentRow = e.Row;
+            var currentItem = currentRow?.DataContext;
+            var currentHeader = e.Column?.Header;
+            var currentValue = e.Column?.GetCellContent(currentRow);
+            var currentValue2 = currentRow.GetPropertyValue("Text");
+
+            //var currentValue2 = currentRow?.DataContext as ShareableDataEntities;
+            
+
+           //urrentItem.
+            //currentValue2.
+
+            //ar val = e.
+            //string myCell = currentValue.Name();
+
+            //DataGrid dataRow = (DataGrid)dataGrid.SelectedItem;
+            // int index = dataGrid.CurrentCell.Column.DisplayIndex;
+            // string cellValue = dataRow..ItemArray[index].ToString();
             // ulozi zmeny v contexte do DB
             TE.SaveChanges();
         }
+
+
+
     }
 }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Shareable_data_generator"
         mc:Ignorable="d"
         Title="MainWindow" Height="630" Width="1529.834">
-    <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" HorizontalAlignment="Left" VerticalAlignment="Top" Height="600" Width="1520" RenderTransformOrigin="0.254,-0.046" AlternatingRowBackground="#FFEAEAEA" FontFamily="Arial" SelectedCellsChanged="dataGrid_SelectedCellsChanged" Margin="0,0,0,-1" CellEditEnding="dataGrid_CellEditEnding">
+    <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" HorizontalAlignment="Left" VerticalAlignment="Top" Height="600" Width="1520" RenderTransformOrigin="0.254,-0.046" AlternatingRowBackground="#FFEAEAEA" FontFamily="Arial" Margin="0,0,0,-1" CellEditEnding="dataGrid_CellEditEnding">
         <DataGrid.Columns>
             <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
             <DataGridTextColumn Header="CustomerName" Binding="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}"/>
@@ -31,7 +31,7 @@
             <DataGridTemplateColumn Header="DELETE ROW">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <Button Click="Button_Click_delete_row" >Text</Button>
+                        <Button Click="Button_Click_delete_row" Background="#FFF72525" >DELETE</Button>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
