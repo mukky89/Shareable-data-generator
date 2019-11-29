@@ -5,42 +5,85 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Shareable_data_generator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="630" Width="1529.834">
-    <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" HorizontalAlignment="Left" VerticalAlignment="Top" Height="600" Width="1520" RenderTransformOrigin="0.254,-0.046" AlternatingRowBackground="#FFEAEAEA" FontFamily="Arial" Margin="0,0,0,-1" CellEditEnding="dataGrid_CellEditEnding">
-        <DataGrid.Columns>
-            <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
-            <DataGridTextColumn Header="CustomerName" Binding="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}"/>
-            <DataGridTextColumn Header="ExcelName" Binding="{Binding ExcelName, UpdateSourceTrigger=PropertyChanged}"/>
-            <DataGridTextColumn Header="ColumnsWidth" Binding="{Binding ColumnsWidth, UpdateSourceTrigger=PropertyChanged}"/>
-            <DataGridTextColumn Header="ColumnsName" Binding="{Binding ColumnsName, UpdateSourceTrigger=PropertyChanged}"/>
-            <DataGridTextColumn Header="SQLstring" Binding="{Binding SQLstring, UpdateSourceTrigger=PropertyChanged}"/>
-            <DataGridTextColumn Header="ISYSview" Binding="{Binding ISYSview, UpdateSourceTrigger=PropertyChanged}"/>
-            <DataGridTextColumn Header="FolderPath" Binding="{Binding FolderPath, UpdateSourceTrigger=PropertyChanged}"/>
-            <DataGridTextColumn Header="FilePath" Binding="{Binding FilePath, UpdateSourceTrigger=PropertyChanged}"/>
-            <DataGridTextColumn Header="ShareableLink" Binding="{Binding ShareableLink, UpdateSourceTrigger=PropertyChanged}"/>
-            <DataGridTextColumn Header="Timer Status"/>
-            <DataGridTextColumn Header="Last Query"/>
-            <DataGridTextColumn Header="File availability"/>
-            <DataGridTemplateColumn Header="TEST">
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <Button Click="Button_Click_Test" >Text</Button>
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn Header="DELETE ROW">
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <Button Click="Button_Click_delete_row" Background="#FFF72525" >DELETE</Button>
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
+        Title="Shareable data generator" Height="640.5" Width="1529.834" WindowState="Maximized" Topmost="True" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen">
+
+    <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Width="1520" Height="593">
+        <Label x:Name="lblTimer" Content="Interval:" Height="25" Margin="0,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBoxInterval" Height="25" TextAlignment="Center" TextWrapping="Wrap" Text="24" Margin="57,6,0,0" Width="66" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button x:Name="btnStartTimer" Content="Start timer" Width="100" HorizontalAlignment="Left" Height="25" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Margin="148,6,0,0" FontWeight="Bold" Click="btnStartTimer_Click"/>
+        <Button x:Name="btnStopTimer" Content="Stop timer" Width="100" HorizontalAlignment="Left" Height="25" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Margin="253,6,0,0"/>
 
 
-        </DataGrid.Columns>
+        <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" RenderTransformOrigin="0,0" FontFamily="Arial" CellEditEnding="dataGrid_CellEditEnding" SelectedCellsChanged="dataGrid_SelectedCellsChanged" CurrentCellChanged="dataGrid_CurrentCellChanged" HorizontalGridLinesBrush="#FF404040" BorderBrush="#FF688CAF" Height="557" VerticalAlignment="Bottom">
+            <DataGrid.AlternatingRowBackground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFCBCBCB" Offset="0"/>
+                    <GradientStop Color="White" Offset="1"/>
+                </LinearGradientBrush>
+            </DataGrid.AlternatingRowBackground>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
+                <DataGridTextColumn Header="CustomerName" Binding="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
+                <DataGridTextColumn Header="SQLstring"  Binding="{Binding SQLstring, UpdateSourceTrigger=PropertyChanged}" Width="200">
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="AcceptsReturn" Value="true" />
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="ColumnsName" Binding="{Binding ColumnsName, UpdateSourceTrigger=PropertyChanged}" Width="100">
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="AcceptsReturn" Value="true" />
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="ExcelName" Binding="{Binding ExcelName, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
+                <DataGridTextColumn Header="FolderPath" Binding="{Binding FolderPath, UpdateSourceTrigger=PropertyChanged}" Width="50">
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="AcceptsReturn" Value="true" />
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="FilePath" Binding="{Binding FilePath, UpdateSourceTrigger=PropertyChanged}" Width="50">
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="AcceptsReturn" Value="true" />
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="ShareableLink" Binding="{Binding ShareableLink, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
+                <DataGridTextColumn Header="Timer Status" Width="Auto"/>
+                <DataGridTextColumn Header="Last Query" Binding="{Binding LastQuery, UpdateSourceTrigger=PropertyChanged}" Width="Auto"/>
+                <DataGridTextColumn Header="File availability" Width="Auto"/>
+                <DataGridTemplateColumn Header="TEST" Width="100" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="Button_Click_Test" Content="Text" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="DELETE ROW" Width="100" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="Button_Click_delete_row" Background="#FFF72525" Content="DELETE" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
+            </DataGrid.Columns>
 
 
 
-    </DataGrid>
+        </DataGrid>
+        <Button x:Name="btnForcedStart" Content="Forced start" Width="100" HorizontalAlignment="Left" Height="25" RenderTransformOrigin="0.313,1.24" VerticalAlignment="Top" Margin="358,6,0,0"/>
+        <Label x:Name="lblTimer_Copy" Content="[h]" Height="25" Margin="124,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
+    </Grid>
 </Window>

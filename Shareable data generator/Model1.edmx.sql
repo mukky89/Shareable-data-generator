@@ -35,14 +35,13 @@ CREATE TABLE [dbo].[MainTable] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [CustomerName] nvarchar(max)  NULL,
     [ExcelName] nvarchar(max)  NULL,
-    [ColumnsWidth] nvarchar(max)  NULL,
     [ColumnsName] nvarchar(max)  NULL,
     [SQLstring] nvarchar(max)  NULL,
     [ISYSview] nvarchar(max)  NULL,
     [FolderPath] nvarchar(max)  NULL,
     [FilePath] nvarchar(max)  NULL,
     [ShareableLink] nvarchar(max)  NULL,
-    [LastQuery] datetime  NULL
+    [LastQuery] nvarchar(max)  NULL
 );
 GO
 

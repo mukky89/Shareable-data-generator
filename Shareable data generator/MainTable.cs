@@ -19,13 +19,12 @@ namespace Shareable_data_generator
         public int Id { get; set; }
         public string CustomerName { get; set; }
         public string ExcelName { get; set; }
-        public string ColumnsWidth { get; set; }
         public string ColumnsName { get; set; }
         public string SQLstring { get; set; }
         public string ISYSview { get; set; }
         public string FolderPath { get; set; }
         public string FilePath { get; set; }
         public string ShareableLink { get; set; }
-        public Nullable<System.DateTime> LastQuery { get; set; }
+        public string LastQuery { get; set; }
     }
 }

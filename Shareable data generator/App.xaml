@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:Shareable_data_generator"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style x:Key="verticalCenter" TargetType="{x:Type TextBlock}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
     </Application.Resources>
 </Application>

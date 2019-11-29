@@ -4,27 +4,27 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ShareableDataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityContainer Name="ShareableDataModelStoreContainer">
-    <EntitySet Name="MainTable" EntityType="ShareableDataModel.Store.MainTable" store:Type="Tables" Schema="dbo" />
-  </EntityContainer>
-  <EntityType Name="MainTable">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CustomerName" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="ExcelName" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="ColumnsWidth" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="ColumnsName" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="SQLstring" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="ISYSview" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="FolderPath" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="FilePath" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="ShareableLink" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="LastQuery" Type="datetime" Nullable="true" />
-  </EntityType>
-</Schema></edmx:StorageModels>
+    <Schema Namespace="ShareableDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="MainTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar(max)" />
+          <Property Name="ExcelName" Type="nvarchar(max)" />
+          <Property Name="ColumnsWidth" Type="nvarchar(max)" />
+          <Property Name="ColumnsName" Type="nvarchar(max)" />
+          <Property Name="SQLstring" Type="nvarchar(max)" />
+          <Property Name="ISYSview" Type="nvarchar(max)" />
+          <Property Name="FolderPath" Type="nvarchar(max)" />
+          <Property Name="FilePath" Type="nvarchar(max)" />
+          <Property Name="ShareableLink" Type="nvarchar(max)" />
+          <Property Name="LastQuery" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityContainer Name="ShareableDataModelStoreContainer">
+          <EntitySet Name="MainTable" EntityType="Self.MainTable" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ShareableDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -35,14 +35,13 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ExcelName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ColumnsWidth" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ColumnsName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SQLstring" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ISYSview" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="FolderPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="FilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ShareableLink" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="LastQuery" Type="DateTime" Precision="3" />
+          <Property Name="LastQuery" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
         </EntityType>
         <EntityContainer Name="ShareableDataEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="MainTable" EntityType="Self.MainTable" />
@@ -59,7 +58,6 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
           <ScalarProperty Name="ExcelName" ColumnName="ExcelName" />
-          <ScalarProperty Name="ColumnsWidth" ColumnName="ColumnsWidth" />
           <ScalarProperty Name="ColumnsName" ColumnName="ColumnsName" />
           <ScalarProperty Name="SQLstring" ColumnName="SQLstring" />
           <ScalarProperty Name="ISYSview" ColumnName="ISYSview" />
