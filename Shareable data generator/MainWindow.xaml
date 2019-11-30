@@ -11,7 +11,7 @@
         <Label x:Name="lblTimer" Content="Interval:" Height="25" Margin="0,6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="textBoxInterval" Height="25" TextAlignment="Center" TextWrapping="Wrap" Text="24" Margin="57,6,0,0" Width="66" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Button x:Name="btnStartTimer" Content="Start timer" Width="100" HorizontalAlignment="Left" Height="25" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Margin="148,6,0,0" FontWeight="Bold" Click="btnStartTimer_Click"/>
-        <Button x:Name="btnStopTimer" Content="Stop timer" Width="100" HorizontalAlignment="Left" Height="25" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Margin="253,6,0,0"/>
+        <Button x:Name="btnStopTimer" Content="Stop timer" Width="100" HorizontalAlignment="Left" Height="25" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Margin="253,6,0,0" Click="btnStopTimer_Click"/>
 
 
         <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" RenderTransformOrigin="0,0" FontFamily="Arial" CellEditEnding="dataGrid_CellEditEnding" SelectedCellsChanged="dataGrid_SelectedCellsChanged" CurrentCellChanged="dataGrid_CurrentCellChanged" HorizontalGridLinesBrush="#FF404040" BorderBrush="#FF688CAF" Height="557" VerticalAlignment="Bottom">

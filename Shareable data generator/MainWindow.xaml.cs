@@ -82,12 +82,6 @@ namespace Shareable_data_generator
             return dt;
         }
 
-        void Button_Click_Test(object sender, RoutedEventArgs e)
-        {
-
-   
-        }
-
 
         void Button_Click_delete_row(object sender, RoutedEventArgs e)
 
@@ -162,43 +156,54 @@ namespace Shareable_data_generator
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            int RecordsCount = 0 ;
 
-
-            /*string CustomerName = (dataGrid.SelectedItem as MainTable).CustomerName;
-            string ExcelName = (dataGrid.SelectedItem as MainTable).ExcelName;
-            string ExcelPath = (dataGrid.SelectedItem as MainTable).FilePath;
-            string ColumnsName = (dataGrid.SelectedItem as MainTable).ColumnsName;
-            string FolderPathSX = FolderPath + @"\ShareableData\" + CustomerName;
-            string[] columns = ColumnsName.Split(';').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-            ExcelEngine excelEngine = new ExcelEngine();
-            IApplication application = excelEngine.Excel;
-            IWorkbook workbook = excelEngine.Excel.Workbooks.Open(ExcelPath);
-
-
-            workbook.Worksheets[0].ClearData();
-            var worksheet = workbook.Worksheets["Data from SYLEX"];
-            for (int i = 0; i < columns.Count(); i++)
+            var data = TE.MainTable.ToList();
+            foreach (var dbdata in data)
             {
-                worksheet.Range[1, i + 1].Value = columns[i];
-                worksheet.Range[1, i + 1].CellStyle.Font.Bold = true;
+                string name = dbdata.ColumnsName;
+                string CustomerName = dbdata.CustomerName;
+                string ExcelName = dbdata.ExcelName;
+                string ExcelPath = dbdata.FilePath;
+                string ColumnsName = dbdata.ColumnsName;
+
+                string FolderPathSX = FolderPath + @"\ShareableData\" + CustomerName;
+                string[] columns = ColumnsName.Split(';').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                ExcelEngine excelEngine = new ExcelEngine();
+                IApplication application = excelEngine.Excel;
+                IWorkbook workbook = excelEngine.Excel.Workbooks.Open(ExcelPath);
+
+
+                workbook.Worksheets[0].ClearData();
+                var worksheet = workbook.Worksheets["Data from SYLEX"];
+                for (int i = 0; i < columns.Count(); i++)
+                {
+                    worksheet.Range[1, i + 1].Value = columns[i];
+                    worksheet.Range[1, i + 1].CellStyle.Font.Bold = true;
+                }
+
+                int ColumnsCount = columns.Count();
+                string sqlString = (dataGrid.SelectedItem as MainTable).SQLstring;
+
+                DataTable SqlData = GetData();
+                worksheet.ImportDataTable(SqlData, true, 1, 1);
+                worksheet.UsedRange.AutofitColumns();
+                worksheet.InsertRow(1, 1, ExcelInsertOptions.FormatAsBefore);
+                worksheet.Range[1, 1].Value = "Last update: " + DateTime.Now.ToString();
+                (dataGrid.SelectedItem as MainTable).LastQuery = DateTime.Now.ToString();
+
+                workbook.SaveAs(ExcelPath);
+                workbook.Close();
+                excelEngine.Dispose();
+                TE.SaveChanges();
+
             }
 
-            int ColumnsCount = columns.Count();
-            string sqlString = (dataGrid.SelectedItem as MainTable).SQLstring;
+             //string CustomerName = (dataGrid.SelectedItem as MainTable).CustomerName;
+             //string ExcelName = (dataGrid.SelectedItem as MainTable).ExcelName;
+             //string ExcelPath = (dataGrid.SelectedItem as MainTable).FilePath;
+             //string ColumnsName = (dataGrid.SelectedItem as MainTable).ColumnsName;
 
-            DataTable SqlData = GetData();
-            worksheet.ImportDataTable(SqlData, true, 1, 1);
-            worksheet.UsedRange.AutofitColumns();
-            worksheet.InsertRow(1, 1, ExcelInsertOptions.FormatAsBefore);
-            worksheet.Range[1, 1].Value = "Last update: " + DateTime.Now.ToString();
-            (dataGrid.SelectedItem as MainTable).LastQuery = DateTime.Now.ToString();
-
-            workbook.SaveAs(ExcelPath);
-            workbook.Close();
-            excelEngine.Dispose();
-            TE.SaveChanges();
-            */
+           
         }
 
         private void btnStartTimer_Click(object sender, RoutedEventArgs e)
@@ -209,7 +214,25 @@ namespace Shareable_data_generator
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = result;
             dispatcherTimer.Start();
+            btnStartTimer.IsEnabled = false;
+            MessageBox.Show("Timer bol zapnutý, interval je: " + hrtoms + " [h]");
+        }
 
+        private void btnStopTimer_Click(object sender, RoutedEventArgs e)
+        {
+            btnStartTimer.IsEnabled = true;
+            System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Stop();
+            MessageBox.Show("Timer bol zastavený");
+        }
+        private void Button_Click_Test(object sender, RoutedEventArgs e)
+        {
+            btnStartTimer.IsEnabled = true;
+            System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Stop();
+            MessageBox.Show("Timer bol zastavený");
         }
     }
 
