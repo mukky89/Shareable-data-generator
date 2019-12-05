@@ -20,6 +20,8 @@ using System.IO;
 using System.Data.SqlClient;
 using Syncfusion.XlsIO;
 using System.Data;
+using System.Windows.Threading;
+using System.Diagnostics;
 
 namespace Shareable_data_generator
 {
@@ -30,8 +32,10 @@ namespace Shareable_data_generator
     {
         // odporuca sa spravit len jeden context pre databazu a pracovat snou, lebo takto sa spravi len jedno nacitanie z DB
         private readonly ShareableDataEntities TE = new ShareableDataEntities();
-        string FolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\OneDrive";
+        string FolderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\OneDrive";
         string conString = @"Data Source=SYXDBX02\ISYS;Initial Catalog=ISYS;User ID=peaklogger;Password=peaklogger123";
+        public DispatcherTimer timer = new DispatcherTimer();
+
 
         public MainWindow()
         {
@@ -39,15 +43,11 @@ namespace Shareable_data_generator
             InitializeComponent();
             loadgrid();
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTc2NDI5QDMxMzcyZTMzMmUzMGtnZUVNR0xlQ0xUNW5sUEhCSjJKbW1UNFF6bVhjR1hqSENyQkRsbTdkQTg9");
-
+            btnStopTimer.IsEnabled = false;
         }
 
         private void loadgrid()
         {
-            // Najprv treba nacitat vsetko z DB do cache a nasledne sa bude pracovat s Local ObservableCollection
-            // ObservableCollection je prave taky list, ktory sa automaticky aktualizuje
-            // na to aby to fungovalo musi kazdy mat atribut spraveny PropertyChanged - na to som ale moc lenivy takze som pridal
-            // plugin ktory to robi za nas + som upravil template Model1.tt na DB, ktory to bude sam pridavat do kazdej tabulky
             TE.MainTable.Load();
             dataGrid.ItemsSource = TE.MainTable.Local;
         }
@@ -69,13 +69,11 @@ namespace Shareable_data_generator
             }
         }
 
-        public DataTable GetData()
+        public DataTable GetData(string query)
         {
             SqlConnection conn = new SqlConnection(conString);
             conn.Open();
-            string query = (dataGrid.SelectedItem as MainTable).SQLstring;
             SqlCommand cmd = new SqlCommand(query, conn);
-
             DataTable dt = new DataTable();
             dt.Load(cmd.ExecuteReader());
             conn.Close();
@@ -88,14 +86,16 @@ namespace Shareable_data_generator
         {
             try
             {
-                int data_id = (dataGrid.SelectedItem as MainTable).Id;
-                MainTable tbl = (from r in TE.MainTable where r.Id == data_id select r).SingleOrDefault();
-                TE.MainTable.Remove(tbl);
-                TE.SaveChanges();
+                if (MessageBox.Show("Chcete vymazať záznam?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    int data_id = (dataGrid.SelectedItem as MainTable).Id;
+                    MainTable tbl = (from r in TE.MainTable where r.Id == data_id select r).SingleOrDefault();
+                    TE.MainTable.Remove(tbl);
+                    TE.SaveChanges();
+                }
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show(ex.Message.ToString());
             }
         }
 
@@ -119,7 +119,7 @@ namespace Shareable_data_generator
                 case "CustomerName":
                     System.IO.Directory.CreateDirectory(FolderPathSX);
                     (dataGrid.SelectedItem as MainTable).FolderPath = FolderPathSX;
-                    (dataGrid.SelectedItem as MainTable).LastQuery = DateTime.Now.ToString();
+                    //(dataGrid.SelectedItem as MainTable).LastQuery = DateTime.Now.ToString();
                     break;
                 case "ExcelName":
                     if (ExcelName != null)
@@ -145,17 +145,16 @@ namespace Shareable_data_generator
             TE.SaveChanges();
         }
 
-        private void dataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-        {
 
-        }
-
-        private void dataGrid_CurrentCellChanged(object sender, EventArgs e)
+        public void timer_Tick(object sender, EventArgs e)
         {
-        }
-
-        private void dispatcherTimer_Tick(object sender, EventArgs e)
-        {
+            if ((string)lblNextRecordData.Content != "")
+            {
+                DateTime NextRec = DateTime.Now;
+                double label = Convert.ToDouble(textBoxInterval.Text);
+                DateTime dt = NextRec.AddHours(label);
+                lblNextRecordData.Content = Convert.ToString(dt);
+            }
 
             var data = TE.MainTable.ToList();
             foreach (var dbdata in data)
@@ -165,6 +164,7 @@ namespace Shareable_data_generator
                 string ExcelName = dbdata.ExcelName;
                 string ExcelPath = dbdata.FilePath;
                 string ColumnsName = dbdata.ColumnsName;
+                string sqlString = dbdata.SQLstring;
 
                 string FolderPathSX = FolderPath + @"\ShareableData\" + CustomerName;
                 string[] columns = ColumnsName.Split(';').Where(x => !string.IsNullOrEmpty(x)).ToArray();
@@ -177,62 +177,78 @@ namespace Shareable_data_generator
                 var worksheet = workbook.Worksheets["Data from SYLEX"];
                 for (int i = 0; i < columns.Count(); i++)
                 {
-                    worksheet.Range[1, i + 1].Value = columns[i];
+                    // worksheet.Range[1, i + 1].Value = columns[i];
                     worksheet.Range[1, i + 1].CellStyle.Font.Bold = true;
                 }
 
                 int ColumnsCount = columns.Count();
-                string sqlString = (dataGrid.SelectedItem as MainTable).SQLstring;
 
-                DataTable SqlData = GetData();
+                DataTable SqlData = GetData(sqlString);
                 worksheet.ImportDataTable(SqlData, true, 1, 1);
                 worksheet.UsedRange.AutofitColumns();
                 worksheet.InsertRow(1, 1, ExcelInsertOptions.FormatAsBefore);
                 worksheet.Range[1, 1].Value = "Last update: " + DateTime.Now.ToString();
-                (dataGrid.SelectedItem as MainTable).LastQuery = DateTime.Now.ToString();
+                dbdata.LastQuery = DateTime.Now.ToString();
 
                 workbook.SaveAs(ExcelPath);
                 workbook.Close();
                 excelEngine.Dispose();
+
                 TE.SaveChanges();
+
 
             }
 
-             //string CustomerName = (dataGrid.SelectedItem as MainTable).CustomerName;
-             //string ExcelName = (dataGrid.SelectedItem as MainTable).ExcelName;
-             //string ExcelPath = (dataGrid.SelectedItem as MainTable).FilePath;
-             //string ColumnsName = (dataGrid.SelectedItem as MainTable).ColumnsName;
+        }
 
-           
+        private void shareablelink_Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            Hyperlink link = (Hyperlink)e.OriginalSource;
+            Process.Start(link.NavigateUri.AbsoluteUri);
         }
 
         private void btnStartTimer_Click(object sender, RoutedEventArgs e)
         {
             double hrtoms = Convert.ToDouble(this.textBoxInterval.Text);
             TimeSpan result = TimeSpan.FromHours(hrtoms);
-            System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = result;
-            dispatcherTimer.Start();
+            timer.Interval = result;
+            timer.Tick += timer_Tick;
+            timer.Start();
             btnStartTimer.IsEnabled = false;
-            MessageBox.Show("Timer bol zapnutý, interval je: " + hrtoms + " [h]");
+            //MessageBox.Show("Timer bol zapnutý, interval je: " + hrtoms + " [h]");
+            btnStopTimer.IsEnabled = true;
+            DateTime Now = DateTime.Now;
+            double label = Convert.ToDouble(textBoxInterval.Text);
+            DateTime dt = Now.AddHours(label);
+            lblNextRecordData.Content = Convert.ToString(dt);
         }
 
         private void btnStopTimer_Click(object sender, RoutedEventArgs e)
         {
             btnStartTimer.IsEnabled = true;
-            System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Stop();
+            timer.Stop();
+            lblNextRecordData.Content = "";
             MessageBox.Show("Timer bol zastavený");
         }
-        private void Button_Click_Test(object sender, RoutedEventArgs e)
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            btnStartTimer.IsEnabled = true;
-            System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Stop();
-            MessageBox.Show("Timer bol zastavený");
+            if (MessageBox.Show("Chcete ukončiť program?", "Exit", MessageBoxButton.YesNo) == MessageBoxResult.No)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void btnForcedStart_Click(object sender, RoutedEventArgs e)
+        {
+            var instance = new MainWindow();
+            instance.timer_Tick(sender, e);
+        }
+
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 
